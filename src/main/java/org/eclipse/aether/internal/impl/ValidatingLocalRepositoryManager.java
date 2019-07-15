@@ -21,6 +21,7 @@ import org.slf4j.LoggerFactory;
 
 import com.github.murkaje.ChecksumProvider;
 import com.github.murkaje.ChecksumValidator;
+import com.github.murkaje.DigestChecksumValidator;
 
 /* In special package to extend package-private class
  * Otherwise would need to copy the whole thing to specialize it
@@ -73,7 +74,7 @@ public class ValidatingLocalRepositoryManager extends EnhancedLocalRepositoryMan
         }
       };
 
-      ChecksumValidator validator = new ChecksumValidator(localFile.toPath(), checksumProvider);
+      ChecksumValidator validator = DigestChecksumValidator.get(localFile.toPath(), checksumProvider);
       if (!validator.isValid()) {
         // Both need to be set, see org.eclipse.aether.internal.impl.DefaultArtifactResolver.isLocallyInstalled
         result.setAvailable(false);

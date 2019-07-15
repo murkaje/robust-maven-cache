@@ -9,7 +9,6 @@ import org.eclipse.aether.repository.LocalRepository;
 import org.eclipse.aether.repository.LocalRepositoryManager;
 import org.eclipse.aether.repository.NoLocalRepositoryManagerException;
 import org.eclipse.aether.spi.connector.layout.RepositoryLayoutFactory;
-import org.eclipse.aether.spi.connector.transport.Transporter;
 import org.eclipse.aether.spi.connector.transport.TransporterProvider;
 import org.eclipse.aether.spi.localrepo.LocalRepositoryManagerFactory;
 import org.slf4j.Logger;
