@@ -49,13 +49,13 @@ public class ValidatingLocalRepositoryManager extends EnhancedLocalRepositoryMan
     File localFile = result.getFile();
     if (result.isAvailable() && localFile != null && localFile.isFile()) {
 
-      URI artifactUri = getArtifactUri(session, request, result);
-      if (artifactUri == null) return result;
+      ChecksumProvider remoteChecksumProvider = (String algorithm) -> {
+        URI artifactUri = getArtifactUri(session, request, result);
+        if (artifactUri == null) return null;
 
-      ChecksumProvider checksumProvider = (String algorithm) -> {
         String extension = algorithm.replace("-", "").toLowerCase(Locale.ENGLISH);
         URI checksumLocation = URI.create(artifactUri.toString() + "." + extension);
-        File tmp = File.createTempFile("checksum-" + request.getArtifact().getArtifactId(), "." + extension);
+        File tmp = File.createTempFile("checksum-" + request.getArtifact().getArtifactId() + "-", "." + extension);
         try {
           //TODO: Add regular maven transport listener? some logging is in validator if remote checksum downloaded
           transporterProvider.newTransporter(session, result.getRepository()).get(new GetTask(checksumLocation).setDataFile(tmp));
@@ -74,7 +74,7 @@ public class ValidatingLocalRepositoryManager extends EnhancedLocalRepositoryMan
         }
       };
 
-      ChecksumValidator validator = DigestChecksumValidator.get(localFile.toPath(), checksumProvider);
+      ChecksumValidator validator = DigestChecksumValidator.get(localFile.toPath(), remoteChecksumProvider);
       if (!validator.isValid()) {
         // Both need to be set, see org.eclipse.aether.internal.impl.DefaultArtifactResolver.isLocallyInstalled
         result.setAvailable(false);

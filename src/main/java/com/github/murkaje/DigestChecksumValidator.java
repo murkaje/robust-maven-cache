@@ -52,6 +52,8 @@ public class DigestChecksumValidator implements ChecksumValidator {
   private static Optional<ChecksumValidator> getRemote(Path file, String algorithm, ChecksumProvider checksumProvider) {
     try {
       String expected = checksumProvider.getChecksum(algorithm);
+      if (expected == null) return Optional.empty();
+
       return Optional.of(new DigestChecksumValidator(file, MessageDigest.getInstance(algorithm), expected));
     }
     catch (IOException e) {
