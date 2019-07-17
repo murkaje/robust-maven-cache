@@ -2,6 +2,7 @@ package com.github.murkaje;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.file.Path;
@@ -77,14 +78,16 @@ public class DigestChecksumValidator implements ChecksumValidator {
   }
 
   @Override
+  @SuppressWarnings("all")
   public boolean isValid() {
     ByteBuffer buffer = ByteBuffer.allocate(8192);
 
     try (FileChannel fc = FileChannel.open(localFile)) {
       while (fc.read(buffer) != -1) {
-        buffer.flip();
+        // Cast to avoid API incompatibility between 8 and 9+
+        ((Buffer)buffer).flip();
         messageDigest.update(buffer);
-        buffer.clear();
+        ((Buffer)buffer).clear();
       }
     }
     catch (IOException e) {
