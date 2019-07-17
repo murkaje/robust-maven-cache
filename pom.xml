@@ -6,7 +6,7 @@
 
   <groupId>com.github.murkaje</groupId>
   <artifactId>robust-maven-cache</artifactId>
-  <version>1.0.1-SNAPSHOT</version>
+  <version>1.0.1</version>
 
   <properties>
     <maven.resolver.version>1.3.3</maven.resolver.version>
